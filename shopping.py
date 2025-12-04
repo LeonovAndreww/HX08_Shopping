@@ -32,6 +32,14 @@ def main():
 
 
 def load_data(filename):
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        # c = 0
+        # for row in reader:
+        #     print(row['Administrative'], row['Administrative_Duration'])
+        #     c+=1
+        #     if c>4: break
+
     """
     Load shopping data from a CSV file `filename` and convert into a list of
     evidence lists and a list of labels. Return a tuple (evidence, labels).
