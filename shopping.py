@@ -32,14 +32,6 @@ def main():
 
 
 def load_data(filename):
-    with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        # c = 0
-        # for row in reader:
-        #     print(row['Administrative'], row['Administrative_Duration'])
-        #     c+=1
-        #     if c>4: break
-
     """
     Load shopping data from a CSV file `filename` and convert into a list of
     evidence lists and a list of labels. Return a tuple (evidence, labels).
@@ -67,8 +59,15 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        evidence = list()
+        labels = list()
+        for rows in reader:
+            evidence.append(list(rows.values())[:17])
+            labels.append(list(rows.values())[17])
 
+    return evidence, labels
 
 def train_model(evidence, labels):
     """
