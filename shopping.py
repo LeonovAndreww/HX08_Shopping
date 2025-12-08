@@ -8,7 +8,6 @@ TEST_SIZE = 0.4
 
 
 def main():
-
     # Check command-line arguments
     if len(sys.argv) != 2:
         sys.exit("Usage: python shopping.py data")
@@ -59,15 +58,53 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
+    months = {
+        "Jan": 0,
+        "Feb": 1,
+        "Mar": 2,
+        "Apr": 3,
+        "May": 4,
+        "June": 5,
+        "Jul": 6,
+        "Aug": 7,
+        "Sep": 8,
+        "Oct": 9,
+        "Nov": 10,
+        "Dec": 11
+    }
+
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        evidence = list()
-        labels = list()
-        for rows in reader:
-            evidence.append(list(rows.values())[:17])
-            labels.append(list(rows.values())[17])
 
-    return evidence, labels
+        evidences = list()
+        labels = list()
+        for row in reader:
+            evidence = [
+                int(row['Administrative']),
+                float(row['Administrative_Duration']),
+                int(row['Informational']),
+                float(row['Informational_Duration']),
+                int(row['ProductRelated']),
+                float(row['ProductRelated_Duration']),
+                float(row['BounceRates']),
+                float(row['ExitRates']),
+                float(row['PageValues']),
+                float(row['SpecialDay']),
+                months[row['Month']],
+                int(row['OperatingSystems']),
+                int(row['Browser']),
+                int(row['Region']),
+                int(row['TrafficType'])]
+            if row['VisitorType'] == "Returning_Visitor": evidence.append(1)
+            else: evidence.append(0)
+            if row['Weekend'] == "TRUE": evidence.append(1)
+            else: evidence.append(0)
+            evidences.append(evidence)
+
+            if row['Revenue'] == "TRUE": labels.append(1)
+            else: labels.append(0)
+
+    return evidences, labels
 
 def train_model(evidence, labels):
     """
